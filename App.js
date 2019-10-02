@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import MainContent from "./components/MainContent";
 import {ScrollView} from "react-native";
 

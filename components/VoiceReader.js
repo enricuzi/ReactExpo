@@ -1,18 +1,18 @@
-import React, {Component} from 'react';
-import {Image, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import React, {Component} from "react";
+import {Image, StyleSheet, Text, TouchableHighlight, View} from "react-native";
 
-import Voice from 'react-native-voice';
+import Voice from "react-native-voice";
 
 export default class VoiceReader extends Component {
 
 	TAG = "VoiceReader";
 
 	state = {
-		recognized: '',
-		pitch: '',
-		error: '',
-		end: '',
-		started: '',
+		recognized: "",
+		pitch: "",
+		error: "",
+		end: "",
+		started: "",
 		results: [],
 		partialResults: [],
 	};
@@ -29,12 +29,12 @@ export default class VoiceReader extends Component {
 	}
 
 	componentWillUnmount() {
-		Voice.destroy().then(Voice.removeAllListeners);
+		// Voice.destroy().then(Voice.removeAllListeners);
 	}
 
 	componentDidMount() {
-		// this.voiceRead("sformato+di+zucchine")
-		this.voiceRead("lasagne+al+sugo")
+		this.voiceRead("sformato+di+zucchine")
+		// this.voiceRead("lasagne+al+sugo")
 	}
 
 	voiceRead = value => {
@@ -43,31 +43,31 @@ export default class VoiceReader extends Component {
 
 	onSpeechStart = e => {
 		// eslint-disable-next-line
-		console.log('onSpeechStart: ', e);
+		console.log("onSpeechStart: ", e);
 		this.setState({
-			started: '√',
+			started: "√",
 		});
 	};
 
 	onSpeechRecognized = e => {
 		// eslint-disable-next-line
-		console.log('onSpeechRecognized: ', e);
+		console.log("onSpeechRecognized: ", e);
 		this.setState({
-			recognized: '√',
+			recognized: "√",
 		});
 	};
 
 	onSpeechEnd = e => {
 		// eslint-disable-next-line
-		console.log('onSpeechEnd: ', e);
+		console.log("onSpeechEnd: ", e);
 		this.setState({
-			end: '√',
+			end: "√",
 		});
 	};
 
 	onSpeechError = e => {
 		// eslint-disable-next-line
-		console.error('onSpeechError: ', e);
+		console.error("onSpeechError: ", e);
 		this.setState({
 			error: JSON.stringify(e.error),
 		});
@@ -75,7 +75,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechResults = e => {
 		// eslint-disable-next-line
-		console.log('onSpeechResults: ', e);
+		console.log("onSpeechResults: ", e);
 		this.setState({
 			results: e.value,
 		});
@@ -85,7 +85,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechPartialResults = e => {
 		// eslint-disable-next-line
-		// console.log('onSpeechPartialResults: ', e);
+		// console.log("onSpeechPartialResults: ", e);
 		this.setState({
 			partialResults: e.value,
 		});
@@ -93,7 +93,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechVolumeChanged = e => {
 		// eslint-disable-next-line
-		// console.log('onSpeechVolumeChanged: ', e);
+		// console.log("onSpeechVolumeChanged: ", e);
 		this.setState({
 			pitch: e.value,
 		});
@@ -101,17 +101,17 @@ export default class VoiceReader extends Component {
 
 	_startRecognizing = async () => {
 		this.setState({
-			recognized: '',
-			pitch: '',
-			error: '',
-			started: '',
+			recognized: "",
+			pitch: "",
+			error: "",
+			started: "",
 			results: [],
 			partialResults: [],
-			end: '',
+			end: "",
 		});
 
 		try {
-			await Voice.start('it-IT');
+			await Voice.start("it-IT");
 		} catch (e) {
 			//eslint-disable-next-line
 			console.error(e);
@@ -144,13 +144,13 @@ export default class VoiceReader extends Component {
 			console.error(e);
 		}
 		this.setState({
-			recognized: '',
-			pitch: '',
-			error: '',
-			started: '',
+			recognized: "",
+			pitch: "",
+			error: "",
+			started: "",
 			results: [],
 			partialResults: [],
-			end: '',
+			end: "",
 		});
 	};
 
@@ -205,29 +205,29 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		// flex: 1,
-		// justifyContent: 'center',
-		// alignItems: 'center',
-		backgroundColor: '#F5FCFF',
+		// justifyContent: "center",
+		// alignItems: "center",
+		backgroundColor: "#F5FCFF",
 	},
 	welcome: {
 		fontSize: 20,
-		textAlign: 'center',
+		textAlign: "center",
 		margin: 10,
 	},
 	action: {
-		textAlign: 'center',
-		color: '#0000FF',
+		textAlign: "center",
+		color: "#0000FF",
 		marginVertical: 5,
-		fontWeight: 'bold',
+		fontWeight: "bold",
 	},
 	instructions: {
-		textAlign: 'center',
-		color: '#333333',
+		textAlign: "center",
+		color: "#333333",
 		marginBottom: 5,
 	},
 	stat: {
-		textAlign: 'center',
-		color: '#B0171F',
+		textAlign: "center",
+		color: "#B0171F",
 		marginBottom: 1,
 	},
 });

@@ -1,4 +1,4 @@
-import XMLParser from 'react-xml-parser';
+import XMLParser from "react-xml-parser";
 
 export default class HTMLParser {
 
@@ -8,16 +8,16 @@ export default class HTMLParser {
 
 	constructor(root) {
 		if (!root) {
-			return console.error('No root for HTMLParser');
+			return console.error("No root for HTMLParser");
 		}
-		if (typeof root === 'string') {
-			this.element = this.parse(root);
+		if (typeof root === "string") {
+			this.element = this._parse(root);
 		} else {
 			this.element = root;
 		}
 	}
 
-	parse = text => this.parser.parseFromString(text);
+	getElementsByTagName = tagName => this.element.getElementsByTagName(tagName);
 
 	getElementsByAttribute = (attributeName, attributeValue) => this._getElementsByAttribute(attributeName, attributeValue);
 
@@ -30,6 +30,8 @@ export default class HTMLParser {
 		}
 		return null
 	};
+
+	_parse = text => this.parser.parseFromString(text);
 
 	_getElementsByAttribute = (attributeName, attributeValue, element) => {
 		let results = [];

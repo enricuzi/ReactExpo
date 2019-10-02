@@ -1,32 +1,48 @@
-import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
-import VoiceReader from './VoiceReader';
-import WebReader from './WebReader';
-import MisyaParser from '../utils/MisyaParser';
-import TextSpeech from './TextSpeech';
+import React, {Component} from "react";
+import {StyleSheet, View} from "react-native";
+import VoiceReader from "./VoiceReader";
+import SearchList from "./search/SearchList";
+import TextSpeech from "./TextSpeech";
+import * as WebReader from "../utils/WebReader";
+import RecipeContainer from "./recipe/RecipeContainer";
 
 export default class MainContent extends Component {
-	TAG = 'MainContent';
+	TAG = "MainContent";
 
 	state = {
-		data: [],
+		search: [],
+		recipe: null
 	};
 
 	onVoiceRead = value => {
-		console.log('Voice read...', value);
-		MisyaParser.parse(value).then(data => {
+		console.log("Voice read...", this.constructor.name);
+		WebReader.search(value).then(data => {
 			this.setState({
-				data: data,
+				search: data,
 			});
 		});
 	};
 
+	onSearchItemSelected = value => {
+		console.log("Items chosen", value);
+		// WebReader.recipe(value).then(data => {
+		// 	this.setState({
+		// 		recipe: data
+		// 	})
+		// })
+	};
+
 	render() {
-		console.log(this.TAG, 'rendering');
+		console.log(this.TAG, "rendering");
 		return (
 			<View style={styles.container}>
+
 				<View style={styles.section}>
-					<WebReader data={this.state.data}/>
+					<RecipeContainer data={this.state.recipe}/>
+				</View>
+
+				<View style={styles.section}>
+					<SearchList data={this.state.search} onItemSelected={this.onSearchItemSelected.bind(this)}/>
 				</View>
 
 				<View style={styles.section}>
@@ -42,6 +58,9 @@ export default class MainContent extends Component {
 }
 
 const styles = StyleSheet.create({
-	container: {},
-	section: {},
+	container: {
+		paddingTop: 50,
+		paddingBottom: 50
+	},
+	section: {}
 });
