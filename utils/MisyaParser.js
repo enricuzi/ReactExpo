@@ -1,4 +1,4 @@
-import HTMLParser from "./HTMLParser";
+import XMLParser from "./XMLParser";
 
 module.exports = {
 	parse: search,
@@ -17,7 +17,7 @@ function search(value) {
 			console.warn("No results found...");
 			return;
 		}
-		const parser = new HTMLParser(text);
+		const parser = new XMLParser(text);
 		console.log("Parsing search results...", parser.element);
 		const cards = parser.getElementsByAttribute("class", "card ricetta");
 		const data = [];
@@ -39,7 +39,7 @@ function search(value) {
 
 function fetchCard(url) {
 	return fetchUrl(url, function (text) {
-		const parser = new HTMLParser(text);
+		const parser = new XMLParser(text);
 		console.log("Parsed response", parser.element);
 		const instructions = parser.getElementsByAttribute("name", "istruzioni")[1];
 		const data = [];

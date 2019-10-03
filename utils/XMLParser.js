@@ -1,14 +1,14 @@
-import XMLParser from "react-xml-parser";
+import HTMLParser from "react-xml-parser";
 
-export default class HTMLParser {
+export default class XMLParser {
 
-	parser = new XMLParser();
+	parser = new HTMLParser();
 
 	element;
 
 	constructor(root) {
 		if (!root) {
-			return console.error("No root for HTMLParser");
+			return console.error("No root for XMLParser");
 		}
 		if (typeof root === "string") {
 			this.element = this._parse(root);
@@ -36,7 +36,7 @@ export default class HTMLParser {
 	_getElementsByAttribute = (attributeName, attributeValue, element) => {
 		let results = [];
 		element = element || this.element;
-		return element.attributes && element.attributes[attributeName] && ((attributeValue && element.attributes[attributeName].toLowerCase() !== attributeValue.toLowerCase()) || results.push(new HTMLParser(element))), element.children.map(child => {
+		return element.attributes && element.attributes[attributeName] && ((attributeValue && element.attributes[attributeName].toLowerCase() !== attributeValue.toLowerCase()) || results.push(new XMLParser(element))), element.children.map(child => {
 			results = results.concat(this._getElementsByAttribute(attributeName, attributeValue, child));
 		}), results;
 	};

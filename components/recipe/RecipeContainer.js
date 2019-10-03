@@ -17,7 +17,6 @@ export default class RecipeContainer extends Component {
 		}
 		return (
 			<View style={styles.container}>
-				<Text style={styles.title}>{this.props.title}</Text>
 				{
 					this.props.data.map((item, index) => {
 						return (
@@ -43,8 +42,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 10
 	},
 	fragment: {
-		paddingStart: 20,
-		paddingEnd: 20,
+		// paddingStart: 20,
+		// paddingEnd: 20,
 		paddingTop: 20,
 		paddingBottom: 20,
 		borderRadius: 10

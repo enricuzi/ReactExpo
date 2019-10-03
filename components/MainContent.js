@@ -25,11 +25,11 @@ export default class MainContent extends Component {
 
 	onSearchItemSelected = value => {
 		console.log("Items chosen", value);
-		// WebReader.recipe(value).then(data => {
-		// 	this.setState({
-		// 		recipe: data
-		// 	})
-		// })
+		WebReader.recipe(value).then(data => {
+			this.setState({
+				recipe: data
+			})
+		})
 	};
 
 	render() {

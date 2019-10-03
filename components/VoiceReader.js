@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Image, StyleSheet, Text, TouchableHighlight, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 
 import Voice from "react-native-voice";
 
@@ -33,8 +33,8 @@ export default class VoiceReader extends Component {
 	}
 
 	componentDidMount() {
-		this.voiceRead("sformato+di+zucchine")
-		// this.voiceRead("lasagne+al+sugo")
+		// this.voiceRead("sformato+di+zucchine")
+		this.voiceRead("lasagne+al+sugo")
 	}
 
 	voiceRead = value => {
@@ -158,41 +158,7 @@ export default class VoiceReader extends Component {
 		console.log(this.TAG, "rendering");
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>Welcome to React Native Voice!</Text>
-				<Text style={styles.instructions}>Press the button and start speaking.</Text>
-				<Text style={styles.stat}>{`Started: ${this.state.started}`}</Text>
-				<Text style={styles.stat}>{`Recognized: ${this.state.recognized}`}</Text>
-				<Text style={styles.stat}>{`Pitch: ${this.state.pitch}`}</Text>
-				<Text style={styles.stat}>{`Error: ${this.state.error}`}</Text>
-				<Text style={styles.stat}>Results</Text>
-				{this.state.results.map((result, index) => {
-					return (
-						<Text key={`result-${index}`} style={styles.stat}>
-							{result}
-						</Text>
-					);
-				})}
-				<Text style={styles.stat}>Partial Results</Text>
-				{this.state.partialResults.map((result, index) => {
-					return (
-						<Text key={`partial-result-${index}`} style={styles.stat}>
-							{result}
-						</Text>
-					);
-				})}
-				<Text style={styles.stat}>{`End: ${this.state.end}`}</Text>
-				<TouchableHighlight onPress={this._startRecognizing}>
-					<Image style={styles.button}/>
-				</TouchableHighlight>
-				<TouchableHighlight onPress={this._stopRecognizing}>
-					<Text style={styles.action}>Stop Recognizing</Text>
-				</TouchableHighlight>
-				<TouchableHighlight onPress={this._cancelRecognizing}>
-					<Text style={styles.action}>Cancel</Text>
-				</TouchableHighlight>
-				<TouchableHighlight onPress={this._destroyRecognizer}>
-					<Text style={styles.action}>Destroy</Text>
-				</TouchableHighlight>
+				<Text>Voice Reader</Text>
 			</View>
 		);
 	}

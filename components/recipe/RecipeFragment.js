@@ -14,18 +14,14 @@ export default class RecipeFragment extends Component {
 	}
 
 	onLayout = event => {
-		if (!this.state.width) {
-			this.setState({
-				width: event.nativeEvent.layout.width,
-				height: event.nativeEvent.layout.height
-			})
-		}
+		this.setState({
+			width: event.nativeEvent.layout.width,
+			height: event.nativeEvent.layout.height
+		})
 	}
 }
 
 const styles = StyleSheet.create({
-	container: {
-	},
-	image: {
-	}
+	container: {},
+	image: {}
 });

@@ -33,8 +33,8 @@ export default class SearchList extends Component {
 const styles = StyleSheet.create({
 	container: {},
 	article: {
-		paddingStart: 20,
-		paddingEnd: 20,
+		// paddingStart: 20,
+		// paddingEnd: 20,
 		paddingTop: 20,
 		paddingBottom: 20,
 		borderRadius: 10

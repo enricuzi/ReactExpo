@@ -1,18 +1,16 @@
 import React, {Component} from "react";
-import {Dimensions, Image, StyleSheet} from "react-native";
+import {Dimensions, Image} from "react-native";
 
 export default class DynamicImage extends Component {
 
 	state = {
-		width: 0,
-		height: 0,
-		ratio: 1
+		height: 0
 	};
 
 	componentDidMount() {
 		Image.getSize(this.props.url, (width, height) => {
 			this.setState({
-				ratio: height / width
+				height: Dimensions.get("screen").width * height / width
 			})
 		})
 	}
@@ -22,17 +20,10 @@ export default class DynamicImage extends Component {
 	}
 
 	render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+		const width = this.props.width || "100%";
+		const height = this.props.height || this.state.height;
 		return (
-			<Image style={styles.image} source={{uri: this.props.url}}/>
+			<Image style={{width: width, height: height}} resizeMode="cover" source={{uri: this.props.url}}/>
 		)
 	}
 }
-
-const styles = StyleSheet.create({
-	image: {
-		width: Dimensions.get("window").width - 10,
-		height: Dimensions.get("window").width / 3 - 10,
-		margin: 5,
-		resizeMode: "cover"
-	}
-});

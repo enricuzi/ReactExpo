@@ -16,7 +16,7 @@ export default class SearchItem extends Component {
 		return (
 			<TouchableHighlight onPress={this.onPressEvent}>
 				<View style={styles.container}>
-					<DynamicImage style={styles.image} url={this.props.image}/>
+					<DynamicImage style={styles.image} url={this.props.image} height={130}/>
 					<Text style={styles.text}>{this.props.title}</Text>
 				</View>
 			</TouchableHighlight>
