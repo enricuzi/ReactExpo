@@ -1,13 +1,11 @@
-import React, {Component} from "react";
+import React from "react";
 import {StyleSheet, Text, View} from "react-native";
 
 import Voice from "react-native-voice";
 
-export default class VoiceReader extends Component {
+export default class VoiceReader {
 
-	TAG = "VoiceReader";
-
-	state = {
+	data = {
 		recognized: "",
 		pitch: "",
 		error: "",
@@ -17,8 +15,19 @@ export default class VoiceReader extends Component {
 		partialResults: [],
 	};
 
-	constructor(props) {
-		super(props);
+	setState (data) {
+		for (const key in data) {
+			if (data.hasOwnProperty(key)) {
+				this.data[key] = data[key]
+			}
+		}
+	}
+
+	get state () {
+		return this.data
+	}
+
+	constructor() {
 		Voice.onSpeechStart = this.onSpeechStart;
 		Voice.onSpeechRecognized = this.onSpeechRecognized;
 		Voice.onSpeechEnd = this.onSpeechEnd;
@@ -28,22 +37,13 @@ export default class VoiceReader extends Component {
 		Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
 	}
 
-	componentWillUnmount() {
-		// Voice.destroy().then(Voice.removeAllListeners);
-	}
-
-	componentDidMount() {
-		// this.voiceRead("sformato+di+zucchine")
-		this.voiceRead("lasagne+al+sugo")
-	}
-
 	voiceRead = value => {
-		this.props.onOutput(value)
+		return value || "lasagne+al+sugo"
 	};
 
 	onSpeechStart = e => {
 		// eslint-disable-next-line
-		console.log("onSpeechStart: ", e);
+		console.log(this.constructor.name, "onSpeechStart: ", e);
 		this.setState({
 			started: "√",
 		});
@@ -51,7 +51,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechRecognized = e => {
 		// eslint-disable-next-line
-		console.log("onSpeechRecognized: ", e);
+		console.log(this.constructor.name, "onSpeechRecognized: ", e);
 		this.setState({
 			recognized: "√",
 		});
@@ -59,7 +59,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechEnd = e => {
 		// eslint-disable-next-line
-		console.log("onSpeechEnd: ", e);
+		console.log(this.constructor.name, "onSpeechEnd: ", e);
 		this.setState({
 			end: "√",
 		});
@@ -75,7 +75,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechResults = e => {
 		// eslint-disable-next-line
-		console.log("onSpeechResults: ", e);
+		console.log(this.constructor.name, "onSpeechResults: ", e);
 		this.setState({
 			results: e.value,
 		});
@@ -85,7 +85,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechPartialResults = e => {
 		// eslint-disable-next-line
-		// console.log("onSpeechPartialResults: ", e);
+		// console.log(this.constructor.name, "onSpeechPartialResults: ", e);
 		this.setState({
 			partialResults: e.value,
 		});
@@ -93,7 +93,7 @@ export default class VoiceReader extends Component {
 
 	onSpeechVolumeChanged = e => {
 		// eslint-disable-next-line
-		// console.log("onSpeechVolumeChanged: ", e);
+		// console.log(this.constructor.name, "onSpeechVolumeChanged: ", e);
 		this.setState({
 			pitch: e.value,
 		});
@@ -153,47 +153,4 @@ export default class VoiceReader extends Component {
 			end: "",
 		});
 	};
-
-	render() {
-		console.log(this.TAG, "rendering");
-		return (
-			<View style={styles.container}>
-				<Text>Voice Reader</Text>
-			</View>
-		);
-	}
 }
-
-const styles = StyleSheet.create({
-	button: {
-		width: 50,
-		height: 50,
-	},
-	container: {
-		// flex: 1,
-		// justifyContent: "center",
-		// alignItems: "center",
-		backgroundColor: "#F5FCFF",
-	},
-	welcome: {
-		fontSize: 20,
-		textAlign: "center",
-		margin: 10,
-	},
-	action: {
-		textAlign: "center",
-		color: "#0000FF",
-		marginVertical: 5,
-		fontWeight: "bold",
-	},
-	instructions: {
-		textAlign: "center",
-		color: "#333333",
-		marginBottom: 5,
-	},
-	stat: {
-		textAlign: "center",
-		color: "#B0171F",
-		marginBottom: 1,
-	},
-});

@@ -1,6 +1,6 @@
-import * as MisyaParser from "./MisyaParser";
+import {recipe, search} from "./MisyaParser";
 
 module.exports = {
-	search: MisyaParser.parse,
-	recipe: MisyaParser.fetchCard
+	search: search,
+	recipe: recipe
 };

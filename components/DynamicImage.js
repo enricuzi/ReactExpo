@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Dimensions, Image} from "react-native";
+import {Dimensions, Image, View} from "react-native";
 
 export default class DynamicImage extends Component {
 
@@ -8,22 +8,29 @@ export default class DynamicImage extends Component {
 	};
 
 	componentDidMount() {
-		Image.getSize(this.props.url, (width, height) => {
-			this.setState({
-				height: Dimensions.get("screen").width * height / width
+		if (this.props.url) {
+			Image.getSize(this.props.url, (width, height) => {
+				this.setState({
+					height: Dimensions.get("screen").width * height / width
+				})
 			})
-		})
+		}
 	}
 
 	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-		return nextProps.url != null
+		return !!nextProps.url
 	}
 
 	render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
-		const width = this.props.width || "100%";
-		const height = this.props.height || this.state.height;
+		if (this.props.url) {
+			const width = this.props.width || "100%";
+			const height = this.props.height || this.state.height;
+			return (
+				<Image style={{width: width, height: height}} resizeMode="cover" source={{uri: this.props.url}}/>
+			)
+		}
 		return (
-			<Image style={{width: width, height: height}} resizeMode="cover" source={{uri: this.props.url}}/>
+			<View/>
 		)
 	}
 }

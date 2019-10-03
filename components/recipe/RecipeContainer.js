@@ -1,13 +1,8 @@
 import React, {Component} from "react";
-import {StyleSheet, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import RecipeFragment from "./RecipeFragment";
-import Text from "react-native-web/dist/exports/Text";
 
 export default class RecipeContainer extends Component {
-
-	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-		return nextProps.data && nextProps.data.length > 0
-	}
 
 	render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
 		if (!this.props.data) {
@@ -17,17 +12,19 @@ export default class RecipeContainer extends Component {
 		}
 		return (
 			<View style={styles.container}>
-				{
-					this.props.data.map((item, index) => {
-						return (
-							<View style={styles.fragment} key={index}>
-								<RecipeFragment text={item.text} image={item.image}/>
-							</View>
-						)
-					})
-				}
+				<Text style={styles.title}>{this.props.data.title}</Text>
+				<View>
+					{
+						this.props.data.data.map((item, index) => {
+							return (
+								<View style={styles.fragment} key={index}>
+									<RecipeFragment text={item.text} image={item.image}/>
+								</View>
+							)
+						})
+					}
+				</View>
 			</View>
-
 		)
 	}
 }
@@ -39,11 +36,10 @@ const styles = StyleSheet.create({
 	},
 	title: {
 		paddingTop: 10,
-		paddingBottom: 10
+		paddingBottom: 10,
+		alignSelf: "center"
 	},
 	fragment: {
-		// paddingStart: 20,
-		// paddingEnd: 20,
 		paddingTop: 20,
 		paddingBottom: 20,
 		borderRadius: 10
