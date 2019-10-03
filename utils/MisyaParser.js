@@ -1,4 +1,4 @@
-import XMLParser from "./XMLParser";
+import HTMLReader from "./HTMLReader";
 
 module.exports = {
 	parse: search,
@@ -17,19 +17,20 @@ function search(value) {
 			console.warn("No results found...");
 			return;
 		}
-		const parser = new XMLParser(text);
-		console.log("Parsing search results...", parser.element);
-		const cards = parser.getElementsByAttribute("class", "card ricetta");
+		const parser = new HTMLReader(text);
+		console.log("Parsing search results...");
+		const cards = parser.querySelectorAll(".card.ricetta");
 		const data = [];
 		if (cards.length) {
 			cards.forEach(card => {
-				const link = card.getElementsByTagName("a")[1];
-				const image = card.getValueByAttribute("data-src");
-				data.push({
+				const link = card.querySelectorAll("a")[1];
+				const image = card.querySelector("img");
+				const item = {
 					url: link.attributes.href,
-					image: image,
-					title: link.value
-				});
+					image: image.attributes["data-src"],
+					title: link.text
+				};
+				data.push(item);
 			});
 			return data
 		}
@@ -39,14 +40,15 @@ function search(value) {
 
 function fetchCard(url) {
 	return fetchUrl(url, function (text) {
-		const parser = new XMLParser(text);
-		console.log("Parsed response", parser.element);
-		const instructions = parser.getElementsByAttribute("name", "istruzioni")[1];
+		const parser = new HTMLReader(text);
+		console.log("Parsed response.");
+		const instructions = parser.querySelectorAll(".col-md-12", "name", "istruzioni")[0].firstChild;
 		const data = [];
-		instructions.element.children.forEach(item => {
+		instructions.childNodes.forEach(item => {
+			const image = item.querySelector("img");
 			data.push({
-				text: item.value.replace("<br />", ""),
-				image: item.children[0].attributes["data-src"],
+				text: item.text.replace("<br />", ""),
+				image: image.attributes["data-src"],
 			});
 		});
 		console.log("Setting data", data);
