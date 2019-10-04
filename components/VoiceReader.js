@@ -1,21 +1,22 @@
 import React from "react";
-import {StyleSheet, Text, View} from "react-native";
-
-import Voice from "react-native-voice";
 
 export default class VoiceReader {
 
+	Voice;
+
 	data = {
-		recognized: "",
-		pitch: "",
-		error: "",
-		end: "",
-		started: "",
+		recognized: false,
+		pitch: false,
+		error: false,
+		end: false,
+		started: false,
 		results: [],
 		partialResults: [],
 	};
 
-	setState (data) {
+	voiceReadCallback = null;
+
+	setState(data) {
 		for (const key in data) {
 			if (data.hasOwnProperty(key)) {
 				this.data[key] = data[key]
@@ -23,83 +24,64 @@ export default class VoiceReader {
 		}
 	}
 
-	get state () {
+	get state() {
 		return this.data
 	}
 
-	constructor() {
-		Voice.onSpeechStart = this.onSpeechStart;
-		Voice.onSpeechRecognized = this.onSpeechRecognized;
-		Voice.onSpeechEnd = this.onSpeechEnd;
-		Voice.onSpeechError = this.onSpeechError;
-		Voice.onSpeechResults = this.onSpeechResults;
-		Voice.onSpeechPartialResults = this.onSpeechPartialResults;
-		Voice.onSpeechVolumeChanged = this.onSpeechVolumeChanged;
+	set onVoiceRead(callback) {
+		this.voiceReadCallback = callback;
+	};
+
+	constructor(Voice) {
+		this.Voice = Voice;
+		Voice.onSpeechStart = e => {
+			// started: "√",
+			console.log(this.constructor.name, "onSpeechStart: ", e);
+			this.setState({
+				started: true,
+			});
+		};
+		Voice.onSpeechRecognized = e => {
+			console.log(this.constructor.name, "onSpeechRecognized: ", e);
+			this.setState({
+				recognized: true,
+			});
+		};
+		Voice.onSpeechEnd = e => {
+			console.log(this.constructor.name, "onSpeechEnd: ", e);
+			this.setState({
+				end: true,
+			});
+		};
+		Voice.onSpeechError = e => {
+			console.error("onSpeechError: ", e);
+			this.setState({
+				error: JSON.stringify(e.error),
+			});
+		};
+		Voice.onSpeechResults = e => {
+			console.log(this.constructor.name, "onSpeechResults: ", e);
+			this.setState({
+				results: e.value,
+			});
+			const params = e.value[0].replace(/ /g, "+");
+			this.voiceReadCallback && this.voiceReadCallback(params)
+		};
+		Voice.onSpeechPartialResults = e => {
+			console.log(this.constructor.name, "onSpeechPartialResults: ", e);
+			this.setState({
+				partialResults: e.value,
+			});
+		};
+		Voice.onSpeechVolumeChanged = e => {
+			console.log(this.constructor.name, "onSpeechVolumeChanged: ", e);
+			this.setState({
+				pitch: e.value,
+			});
+		};
 	}
 
-	voiceRead = value => {
-		return value || "lasagne+al+sugo"
-	};
-
-	onSpeechStart = e => {
-		// eslint-disable-next-line
-		console.log(this.constructor.name, "onSpeechStart: ", e);
-		this.setState({
-			started: "√",
-		});
-	};
-
-	onSpeechRecognized = e => {
-		// eslint-disable-next-line
-		console.log(this.constructor.name, "onSpeechRecognized: ", e);
-		this.setState({
-			recognized: "√",
-		});
-	};
-
-	onSpeechEnd = e => {
-		// eslint-disable-next-line
-		console.log(this.constructor.name, "onSpeechEnd: ", e);
-		this.setState({
-			end: "√",
-		});
-	};
-
-	onSpeechError = e => {
-		// eslint-disable-next-line
-		console.error("onSpeechError: ", e);
-		this.setState({
-			error: JSON.stringify(e.error),
-		});
-	};
-
-	onSpeechResults = e => {
-		// eslint-disable-next-line
-		console.log(this.constructor.name, "onSpeechResults: ", e);
-		this.setState({
-			results: e.value,
-		});
-		const params = e.value[0].replace(/ /g, "+");
-		this.voiceRead(params)
-	};
-
-	onSpeechPartialResults = e => {
-		// eslint-disable-next-line
-		// console.log(this.constructor.name, "onSpeechPartialResults: ", e);
-		this.setState({
-			partialResults: e.value,
-		});
-	};
-
-	onSpeechVolumeChanged = e => {
-		// eslint-disable-next-line
-		// console.log(this.constructor.name, "onSpeechVolumeChanged: ", e);
-		this.setState({
-			pitch: e.value,
-		});
-	};
-
-	_startRecognizing = async () => {
+	start = () => {
 		this.setState({
 			recognized: "",
 			pitch: "",
@@ -110,39 +92,18 @@ export default class VoiceReader {
 			end: "",
 		});
 
-		try {
-			await Voice.start("it-IT");
-		} catch (e) {
-			//eslint-disable-next-line
-			console.error(e);
-		}
+		return this.Voice.start("it-IT");
 	};
 
-	_stopRecognizing = async () => {
-		try {
-			await Voice.stop();
-		} catch (e) {
-			//eslint-disable-next-line
-			console.error(e);
-		}
+	stop = () => {
+		return this.Voice.stop();
 	};
 
-	_cancelRecognizing = async () => {
-		try {
-			await Voice.cancel();
-		} catch (e) {
-			//eslint-disable-next-line
-			console.error(e);
-		}
+	cancel = () => {
+		return this.Voice.cancel();
 	};
 
-	_destroyRecognizer = async () => {
-		try {
-			await Voice.destroy();
-		} catch (e) {
-			//eslint-disable-next-line
-			console.error(e);
-		}
+	destroy = () => {
 		this.setState({
 			recognized: "",
 			pitch: "",
@@ -152,5 +113,6 @@ export default class VoiceReader {
 			partialResults: [],
 			end: "",
 		});
+		return this.Voice.destroy();
 	};
 }

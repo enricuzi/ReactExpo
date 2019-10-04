@@ -1,8 +1,11 @@
 import React, {Component} from "react";
-import {ActivityIndicator, BackHandler, Button, Dimensions, StyleSheet, View} from "react-native";
+import {ActivityIndicator, BackHandler, Dimensions, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import * as WebReader from "../utils/WebReader";
 import RecipeContainer from "./recipe/RecipeContainer";
 import SearchList from "./search/SearchList";
+import TextSpeech from "./TextSpeech";
+import VoiceReader from "./VoiceReader";
+import Voice from "react-native-voice";
 
 export default class MainContent extends Component {
 
@@ -11,6 +14,9 @@ export default class MainContent extends Component {
 		recipe: null,
 		loading: false
 	};
+
+	voiceSpeaker;
+	voiceReader;
 
 	onVoiceRead = value => {
 		console.log(this.constructor.name, "Voice read...");
@@ -40,7 +46,21 @@ export default class MainContent extends Component {
 	};
 
 	componentDidMount(): void {
+		console.log(this.constructor.name, "Component did mount");
+		this.voiceSpeaker = new TextSpeech();
+
+		this.voiceReader = new VoiceReader(Voice);
+		this.voiceReader.start().catch(e => console.error(e));
+		this.voiceReader.onVoiceRead = data => {
+			console.log(this.constructor.name, "Voice Reader...", data)
+		};
+
 		BackHandler.addEventListener('hardwareBackPress', () => {
+			if (!this.state.recipe && !this.state.search) {
+				console.log(this.constructor.name, "Exiting app...");
+				BackHandler.exitApp();
+				return true
+			}
 			console.log(this.constructor.name, "Clearing view...");
 			if (this.state.recipe) {
 				this.setState({
@@ -51,7 +71,7 @@ export default class MainContent extends Component {
 					search: null
 				})
 			}
-			return true;
+			return true
 		});
 	}
 
@@ -72,8 +92,10 @@ export default class MainContent extends Component {
 		}
 		if (!this.state.search && !this.state.recipe) {
 			return (
-				<View style={styles.buttonStart}>
-					<Button onPress={this.onVoiceRead} title={"Start"}/>
+				<View style={styles.buttonContainer}>
+					<TouchableOpacity style={styles.buttonArea} onPress={this.onVoiceRead}>
+						<Text style={styles.buttonText}>Start</Text>
+					</TouchableOpacity>
 				</View>
 			)
 		}
@@ -95,22 +117,34 @@ export default class MainContent extends Component {
 		);
 	}
 }
-
+const paddingStart = 20;
+const paddingEnd = 20;
 const styles = StyleSheet.create({
 	container: {
 		paddingTop: 50,
 		paddingBottom: 50,
-		paddingStart: 20,
-		paddingEnd: 20
+		paddingStart: paddingStart,
+		paddingEnd: paddingEnd
 	},
 	section: {},
 	spinner: {
 		height: Dimensions.get("screen").height,
 		justifyContent: "center"
 	},
-	buttonStart: {
+	buttonContainer: {
 		height: Dimensions.get("screen").height,
 		justifyContent: "flex-end",
-		paddingBottom: 50
+		paddingBottom: 50,
+		paddingStart: paddingStart,
+		paddingEnd: paddingEnd,
+	},
+	buttonArea: {
+		paddingTop: 40,
+		paddingBottom: 40,
+		alignItems: "center",
+		backgroundColor: "skyblue"
+	},
+	buttonText: {
+		color: "#fff"
 	}
 });
